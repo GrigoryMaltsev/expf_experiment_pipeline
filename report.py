@@ -1,11 +1,11 @@
 import pandas as pd
 import numpy as np
 import abc
-import utils
+# import utils
 import config as cfg
 from itertools import product
 from metric_builder import Metric, CalculateMetric
-from stattests import TTestFromStats, calculate_statistics, calculate_linearization
+from stattests import TTestFromStats, MannWhitneyFromStats, ZtestFromStats, calculate_statistics, calculate_linearization
 
 
 class Report:
@@ -14,13 +14,23 @@ class Report:
 
 
 class BuildMetricReport:
+
     def __call__(self, calculated_metric, metric_items) -> Report:
+
         ttest = TTestFromStats()
+        utest = MannWhitneyFromStats()
+        ztest = ZtestFromStats()
         cfg.logger.info(f"{metric_items.name}")
 
         df_ = calculate_linearization(calculated_metric)
-        stats = calculate_statistics(df_, metric_items.type)
-        criteria_res = ttest(stats)
+        stats = calculate_statistics(df_, metric_items.estimator)
+        
+        if metric_items.estimator == 't_test':
+            criteria_res = ttest(stats)
+        elif metric_items.estimator == 'mann_whitney':
+            criteria_res = utest(stats)
+        elif metric_items.estimator == 'prop_test':
+            criteria_res = ztest(stats)
 
         report_items = pd.DataFrame({
             "metric_name": metric_items.name,

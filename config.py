@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from dotenv import load_dotenv
 
+
 base_path = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(dotenv_path="{dir}/.env".format(dir=base_path))
 
@@ -14,7 +15,8 @@ formatter = logging.Formatter('[%(asctime)s] - %(name)s - %(levelname)s - %(mess
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-PATH_METRIC_CONFIGS = "params/metrics/"
+# PATH_METRIC_CONFIGS = "params/metrics/default"
+PATH_METRIC_CONFIGS = "params/metrics/todo"
 DEFAULT_ESTIMATOR = "t_test_linearization"
 DEFAULT_METRIC_TYPE = "ratio"
 DEFAULT_UNIT_LEVEL = "client_id"
